@@ -62,3 +62,18 @@ void main() {
   test(std::move(x)); // rvalue
 }
 ```
+
+# Lambdas
+
+```
+[](int x, int y) -> int {return x + y;}
+```
+
+| | |
+| - | - |
+| `[bias]` | Zugriff auf `bias` by-value |
+| `[&bias]` | Zugriff auf `bias` by-reference |
+| `[=]` | Zugriff auf alles by-value |
+| `[&]` | Zugriff auf alles by-reference |
+| `[this]` | Zugriff auf alle Member by-pointer |
+| `[=, &bias]` | Zugriff auf `bias` by-reference, auf alles andere by-value |
