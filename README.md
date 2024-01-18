@@ -63,9 +63,99 @@ void main() {
 }
 ```
 
+# Vererbung
+
+```c++
+class Person {
+  int m_age;
+public:
+  Person(int age): m_age(age) {}
+}
+
+class Student : public Person {
+  int m_number;
+public:
+  Student(int age, int number): Person(age), m_number(number) {}
+}
+
+// cast
+Person *person = new Person();
+Student *student = new Student();
+Person *p1 = student;
+Student *p2 = static_cast<Student*>(p1);
+Student *p3 = static_cast<Student*>(person); // ungültig
+Student *p4 = dynamic_cast<Student*>(p1);
+Student *p5 = dynamic_cast<Student*>(person); // p5 = nullptr
+
+shared_ptr<Person> spPerson = make_shared<Person>();
+shared_ptr<Person> spStudent = make_shared<Student>();
+auto sp1 = static_pointer_cast<Student>(spStudent);
+auto sp2 = dynamic_pointer_cast<Student>(spStudent);
+auto sp3 = dynamic_pointer_cast<Student>(spPerson); // sp3 = nullptr
+
+// RTTI
+type_info &t = typeid(*person);
+```
+
+## Zugriffsrechte
+
+| Basisklasse | geerbt als | abgeleitete Klasse |
+| - | - | - |
+| public<br>protected<br>private | public | public<br>protected<br>no access |
+| public<br>protected<br>private | protected | protected<br>protected<br>no access |
+| public<br>protected<br>private | private | private<br>private<br>no access |
+
+# Templates
+
+```c++
+template<typename T>
+T min(T a, T b) {/*...*/}
+
+template<typename T> // T ist irgendein Typ
+template<class T> // T ist eine Klasse
+template<size_t S> // S ist ein Wert vom Typ size_t
+
+// Variadic templates
+template<typename... Ts> class C {}
+size_t types = sizeof...(Ts);
+
+template<typename... Ts> void func(const Ts&... vs) {}
+size_t params = sizeof...(vs);
+
+// Universalreferenz
+template<typename T> void f(T &&x) {}
+template<typename T> void g(T &&y) {
+  f(std::forward<T>(y));
+}
+```
+
+#Konzepte
+
+```c++
+template<typename T>
+concept Addable = requires (T a, T b) {
+  a+b;
+};
+
+template<typename T>
+concept TypeTest = requires {
+  typename T::ElementType;
+};
+
+template<typename T, template<typename> class S>
+concept TemplateTest = requires {
+  typename S<T>;
+};
+
+template<typename T>
+concept InvokeIntegral = requires (T a) {
+  { a() } -> std::integral;
+};
+```
+
 # Lambdas
 
-```
+```c++
 [](int x, int y) -> int {return x + y;}
 ```
 
