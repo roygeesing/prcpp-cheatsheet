@@ -122,6 +122,13 @@ size_t types = sizeof...(Ts);
 template<typename... Ts> void func(const Ts&... vs) {}
 size_t params = sizeof...(vs);
 
+template<typename First, typename... Rest>
+void logging(const First &first, const Rest&... rest) {
+  std::cout << '[' << sizeof...(rest) << "] ";
+  std::cout << first << ", ";
+  logging(rest...);
+}
+
 // Universalreferenz
 template<typename T> void f(T &&x) {}
 template<typename T> void g(T &&y) {
